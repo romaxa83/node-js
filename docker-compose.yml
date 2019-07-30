@@ -1,0 +1,24 @@
+version: '3'
+services:
+
+    app-nodejs:
+        image: node:12.7.0-alpine
+        volumes:
+            - ./app:/var/www/app
+        working_dir: /var/www/app
+        ports:
+            - 3000:3000    
+        tty: true  #позволяет процесу nodejs висеть постояно
+   
+    portainer:
+        image: portainer/portainer
+        command: -H unix:///var/run/docker.sock
+        restart: always
+        ports:
+            - 9999:9000
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - portainer_data:/data    
+
+volumes:
+    portainer_data:
