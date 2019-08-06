@@ -8,6 +8,8 @@ const homeRoutes = require('./routes/home');
 const coursesRoutes = require('./routes/courses');
 const addRoutes = require('./routes/add');
 const cartRoutes = require('./routes/cart');
+//Mongo
+const urlMongoDB = `mongodb+srv://romaxa:LATKYkewda2T3oOi@cluster0-vnd12.mongodb.net/test?retryWrites=true&w=majority`;
 
 // конфигурируем handlebars
 const hbs = exphbs.create({
@@ -19,7 +21,7 @@ app.engine('hbs', hbs.engine);	// регистрируем handlebars
 app.set('view engine', 'hbs'); // используем handlebars в express
 app.set('views', 'views');	// указываем где храняться шаблоны
 
-app.use(express.static('public'));	//регистрируем статические файлы
+app.use(express.static(path.join(__dirname, 'public')));	//регистрируем статические файлы
 app.use(express.urlencoded({extended: true}));
 app.use('/', homeRoutes);			//регистрируем пути(первый параметр -
 app.use('/add', addRoutes);	//префикс для все путе в файле)
