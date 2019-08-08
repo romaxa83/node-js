@@ -9,7 +9,8 @@ const coursesRoutes = require('./routes/courses');
 const addRoutes = require('./routes/add');
 const cartRoutes = require('./routes/cart');
 //Mongo
-const urlMongoDB = `mongodb+srv://romaxa:LATKYkewda2T3oOi@cluster0-vnd12.mongodb.net/test?retryWrites=true&w=majority`;
+const mongoose = require('mongoose');
+const urlMongoDB = `mongodb+srv://romaxa:LATKYkewda2T3oOi@cluster0-vnd12.mongodb.net/shop`;
 
 // конфигурируем handlebars
 const hbs = exphbs.create({
@@ -28,6 +29,23 @@ app.use('/add', addRoutes);	//префикс для все путе в файл�
 app.use('/courses', coursesRoutes);
 app.use('/cart', cartRoutes);
 
-app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`);
-});
+async function start()
+{
+	try {
+		// подключаемся к базе данных
+        await mongoose.connect(urlMongoDB, {
+        	useNewUrlParser: true,
+			useFindAndModify: false
+        });
+        // запускаем приложение
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+            console.log(`MongoDB connection`);
+        });
+
+	} catch (err) {
+		console.log(err);
+	}
+
+}
+start();
