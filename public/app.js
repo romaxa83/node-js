@@ -5,9 +5,24 @@ const formatPrice = price => {
         style: 'currency'
     }).format(price);
 };
+// форматируем дату
+const formatDate = date => {
+    return new Intl.DateTimeFormat('ua', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+    }).format(new Date(date));
+};
 
 document.querySelectorAll('.price').forEach(node => {
     node.textContent = formatPrice(node.textContent);
+});
+
+document.querySelectorAll('.date').forEach(node => {
+    node.textContent = formatDate(node.textContent);
 });
 
 // удаление курсов из корзины

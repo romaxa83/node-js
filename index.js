@@ -8,6 +8,7 @@ const homeRoutes = require('./routes/home');
 const coursesRoutes = require('./routes/courses');
 const addRoutes = require('./routes/add');
 const cartRoutes = require('./routes/cart');
+const ordersRoutes = require('./routes/orders');
 //Mongo
 const mongoose = require('mongoose');
 const urlMongoDB = `mongodb+srv://romaxa:LATKYkewda2T3oOi@cluster0-vnd12.mongodb.net/shop`;
@@ -41,6 +42,7 @@ app.use('/', homeRoutes);			//регистрируем пути(первый п�
 app.use('/add', addRoutes);	//префикс для все путе в файле)
 app.use('/courses', coursesRoutes);
 app.use('/cart', cartRoutes);
+app.use('/orders', ordersRoutes);
 
 async function start()
 {
