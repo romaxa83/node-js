@@ -31,9 +31,13 @@ if($cart) {
     $cart.addEventListener('click', event => {
         if(event.target.classList.contains(('js-remove'))) {
             const id = event.target.dataset.id;
+            const csrf = event.target.dataset.csrf;
             //ajax запрос
             fetch('/cart/remove/' + id, {
-                method: 'delete'
+                method: 'delete',
+                headers: {
+                    'X-XSRF-TOKEN': csrf
+                }
             }).then(res => res.json())
                 .then(cart => {
                     if(cart.courses.length) {
@@ -58,3 +62,6 @@ if($cart) {
         }
     })
 }
+
+// инициализируем табы
+M.Tabs.init(document.querySelectorAll('.tabs'));
