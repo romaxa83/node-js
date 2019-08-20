@@ -16,7 +16,10 @@
                         <a href="/courses/{{id}}" target="_blank">Open course</a>
                         <!--получение данных из корневого элемента-->
                         {{#if @root.isAuth}}
-                            <a href="/courses/{{id}}/edit?allow=true">Edit</a>
+                            <!--собственный хелпер для сравнения-->
+                            {{#ifequals userId._id @root.userId}}
+                                <a href="/courses/{{id}}/edit?allow=true">Edit</a>
+                            {{/ifequals}}
                             <form action="/cart/add" method="POST">
                                 <input type="hidden" name="id" value="{{id}}">
                                 <input type="hidden" name="_csrf" value="{{@root.csrf}}">

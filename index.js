@@ -16,7 +16,9 @@ const ordersRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
 // Mongo
 const mongoose = require('mongoose');
-const urlMongoDB = `mongodb+srv://romaxa:LATKYkewda2T3oOi@cluster0-vnd12.mongodb.net/shop`;
+
+const config = require('./config');
+
 // Middleware
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
@@ -24,13 +26,14 @@ const userMiddleware = require('./middleware/user');
 // конфигурируем handlebars
 const hbs = exphbs.create({
 	defaultLayout: 'main',
-	extname: 'hbs'
+	extname: 'hbs',
+	helpers: require('./utils/hbs-helpers')	// подключение собственных хелперов
 });
 
 // настройка автоматического сохранение сессий в mongo
 const store = new MongoStore({
 	collection: 'sessions',	// название таблицы для сохранение сессии
-	uri: urlMongoDB			// url для подключение к mongo
+	uri: config.MONGODB_URI			// url для подключение к mongo
 });
 
 app.engine('hbs', hbs.engine);	// регистрируем handlebars
@@ -41,7 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')));	//регистриру�
 app.use(express.urlencoded({extended: true}));
 //настраиваем сессию
 app.use(session({
-	secret: 'some secret value',	//строка на основе которой сессия будет шифроваться
+	secret: config.SESSION_SECRET,	//строка на основе которой сессия будет шифроваться
 	resave: false,
 	saveUninitialized: false,
 	store: store					// store для автоматичесого хранения сессии
@@ -65,7 +68,7 @@ async function start()
 {
 	try {
 		// подключаемся к базе данных
-        await mongoose.connect(urlMongoDB, {
+        await mongoose.connect(config.MONGODB_URI, {
         	useNewUrlParser: true,
 			useFindAndModify: false
         });
