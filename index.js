@@ -22,6 +22,7 @@ const config = require('./config');
 // Middleware
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
+const errorHandler = require('./middleware/error');
 
 // конфигурируем handlebars
 const hbs = exphbs.create({
@@ -56,13 +57,15 @@ app.use(flash());
 // передаем свой middleware
 app.use(varMiddleware);
 app.use(userMiddleware);
-
+// маршруты
 app.use('/', homeRoutes);			//регистрируем пути(первый параметр -
 app.use('/add', addRoutes);	//префикс для все путе в файле)
 app.use('/courses', coursesRoutes);
 app.use('/cart', cartRoutes);
 app.use('/orders', ordersRoutes);
 app.use('/auth', authRoutes);
+// обработка ошибок с роутами подключаеться в самом низу
+app.use(errorHandler);
 
 async function start()
 {

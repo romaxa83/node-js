@@ -1,5 +1,7 @@
 const {Router} = require('express');
+const {validationResult} = require('express-validator');
 const Course = require('../models/course');
+const {courseValidators} = require('../utils/validators');
 const router = Router();
 const auth = require('../middleware/auth');
 
@@ -25,7 +27,13 @@ router.get('/', async (req, res, next) => {
 	}
 });
 
-router.post('/edit', auth, async (req, res) => {
+router.post('/edit', auth, courseValidators,async (req, res) => {
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+
+        return res.status(422).redirect(`/courses/${req.body.id}/edit?allow=true`);
+    }
 
 	try {
         const {id} = req.body;
