@@ -14,6 +14,7 @@ const addRoutes = require('./routes/add');
 const cartRoutes = require('./routes/cart');
 const ordersRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profile');
 // Mongo
 const mongoose = require('mongoose');
 
@@ -23,6 +24,7 @@ const config = require('./config');
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
 const errorHandler = require('./middleware/error');
+const fileMiddleware = require('./middleware/file');
 
 // конфигурируем handlebars
 const hbs = exphbs.create({
@@ -42,6 +44,7 @@ app.set('view engine', 'hbs'); // используем handlebars в express
 app.set('views', 'views');	// указываем где храняться шаблоны
 
 app.use(express.static(path.join(__dirname, 'public')));	//регистрируем статические файлы
+app.use('/images',express.static(path.join(__dirname, 'images')));
 app.use(express.urlencoded({extended: true}));
 //настраиваем сессию
 app.use(session({
@@ -50,6 +53,8 @@ app.use(session({
 	saveUninitialized: false,
 	store: store					// store для автоматичесого хранения сессии
 }));
+// middleware для загрузки файла,в single передаеться имя нипута загружающий файл
+app.use(fileMiddleware.single('avatar'));
 // для генерации csrf-ключей
 app.use(csrf());
 // flash сообщения
@@ -64,6 +69,7 @@ app.use('/courses', coursesRoutes);
 app.use('/cart', cartRoutes);
 app.use('/orders', ordersRoutes);
 app.use('/auth', authRoutes);
+app.use('/profile', profileRoutes);
 // обработка ошибок с роутами подключаеться в самом низу
 app.use(errorHandler);
 
