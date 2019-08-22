@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const csrf = require('csurf');
+const helmet = require('helmet');
+const compression = require('compression');
 const flash = require('connect-flash');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
@@ -59,6 +61,10 @@ app.use(fileMiddleware.single('avatar'));
 app.use(csrf());
 // flash сообщения
 app.use(flash());
+// добавление хедеров для защиты
+app.use(helmet());
+// для сжатия статических файлов
+app.use(compression());
 // передаем свой middleware
 app.use(varMiddleware);
 app.use(userMiddleware);
